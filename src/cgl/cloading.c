@@ -1,0 +1,67 @@
+#include "cloading.h"
+
+PFNGLUSEPROGRAMPROC glUseProgram;
+PFNGLLINKPROGRAMPROC glLinkProgram;
+PFNGLGETPROGRAMIVPROC glGetProgramiv;
+PFNGLGETPROGRAMIVPROC glGetProgramiv;
+PFNGLCREATEPROGRAMPROC glCreateProgram;
+PFNGLDELETEPROGRAMPROC glDeleteProgram;
+PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
+
+PFNGLGETSHADERIVPROC glGetShaderiv;
+PFNGLATTACHSHADERPROC glAttachShader;
+PFNGLSHADERSOURCEPROC glShaderSource;
+PFNGLCREATESHADERPROC glCreateShader;
+PFNGLDELETESHADERPROC glDeleteShader;
+PFNGLCOMPILESHADERPROC glCompileShader;
+PFNGLCOMPILESHADERPROC glCompileShader;
+PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog;
+
+PFNGLBINDBUFFERPROC glBindBuffer;
+PFNGLGENBUFFERSPROC glGenBuffers;
+PFNGLBUFFERDATAPROC glBufferData;
+PFNGLDELETEBUFFERSPROC glDeleteBuffers;
+PFNGLGENVERTEXARRAYSPROC glGenVertexArrays;
+PFNGLBINDVERTEXARRAYPROC glBindVertexArray;
+PFNGLGETATTRIBLOCATIONPROC glGetAttribLocation;
+PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
+PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray;
+
+#define LoadFunc(T, val) val=(T)GetAnyGLFuncAddress(#val)
+
+
+void *GetAnyGLFuncAddress(const char*name)
+{
+	void* p = (void* )glXGetProcAddress((const GLubyte *) name);
+	return p;
+}
+
+void cgl_load_opengl_funcs()
+{
+	LoadFunc(PFNGLUSEPROGRAMPROC, glUseProgram);
+	LoadFunc(PFNGLLINKPROGRAMPROC, glLinkProgram);
+	LoadFunc(PFNGLGETPROGRAMIVPROC, glGetProgramiv);
+	LoadFunc(PFNGLCREATEPROGRAMPROC, glCreateProgram);
+	LoadFunc(PFNGLDELETEPROGRAMPROC, glDeleteProgram);
+	LoadFunc(PFNGLGETPROGRAMINFOLOGPROC, glGetProgramInfoLog);
+
+	LoadFunc(PFNGLGETSHADERIVPROC, glGetShaderiv);
+	LoadFunc(PFNGLATTACHSHADERPROC, glAttachShader);
+	LoadFunc(PFNGLGETPROGRAMIVPROC, glGetProgramiv);
+	LoadFunc(PFNGLSHADERSOURCEPROC, glShaderSource);
+	LoadFunc(PFNGLCREATESHADERPROC, glCreateShader);
+	LoadFunc(PFNGLDELETESHADERPROC, glDeleteShader);
+	LoadFunc(PFNGLCOMPILESHADERPROC, glCompileShader);
+	LoadFunc(PFNGLCOMPILESHADERPROC, glCompileShader);
+	LoadFunc(PFNGLGETSHADERINFOLOGPROC, glGetShaderInfoLog);
+
+	LoadFunc(PFNGLBINDBUFFERPROC, glBindBuffer);
+	LoadFunc(PFNGLGENBUFFERSPROC, glGenBuffers);
+	LoadFunc(PFNGLBUFFERDATAPROC, glBufferData);
+	LoadFunc(PFNGLDELETEBUFFERSPROC, glDeleteBuffers);
+	LoadFunc(PFNGLGENVERTEXARRAYSPROC, glGenVertexArrays);
+	LoadFunc(PFNGLBINDVERTEXARRAYPROC, glBindVertexArray);
+	LoadFunc(PFNGLGETATTRIBLOCATIONPROC, glGetAttribLocation);
+	LoadFunc(PFNGLVERTEXATTRIBPOINTERPROC, glVertexAttribPointer);
+	LoadFunc(PFNGLENABLEVERTEXATTRIBARRAYPROC, glEnableVertexAttribArray);
+}

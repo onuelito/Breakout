@@ -1,0 +1,20 @@
+[[ C99 Project - Breakout, by Onuelito ]]
+
+-[ Build Requirements ]-
+
+ Library used 	: {OpenGL, X11}
+ OpenGL Version : 3.0
+ GLX Version	: 1.4
+
+-[ Compiling ]-
+
+ Use the `make` command in the root project directory then run the executable.
+
+
+-[ Summary ]-
+
+ The goal of this project was to make a light, portable and easy to compile game for GNU/Linux as
+ well as to challenge myself.
+
+
+-[ How it works ]-
