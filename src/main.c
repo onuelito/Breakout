@@ -39,12 +39,12 @@ static void init()
 	Player.speed = 300;
 	Player.velocity[0] = 0;
 	Player.velocity[1] = 0;
-	Player.body = create_rect(300, 20, 120, 15);
+	Player.body = create_rect(300, 60, 120, 15);
 
 	Ball.speed = 250.0;
 	Ball.body = create_rect(300, 300, 15, 15);
 	Ball.body.velocity[0] = 0;
-	Ball.body.velocity[1] = -50;
+	Ball.body.velocity[1] = -1;
 
 	create_paddles();
 }
@@ -63,13 +63,16 @@ static void render()
 static void update(double dt)
 {
 	//Physics related function//
-	
-
 
 	if (Ball.body.y < -8) Ball.body.y = 300;
 
+	if (Ball.body.y > 615)
+	{
+		Ball.body.y = 300;
+		Ball.body.velocity[1] *= -1;
+	}
+
 	move_player(&Player.body, Player.velocity[0]*dt, 0);
-	//move_rect(&Ball.body, (Ball.velocity[0]*dt), (Ball.velocity[1]*dt));
 	move_ball(&Ball.body, &Player.body);
 
 }

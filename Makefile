@@ -5,7 +5,7 @@ OBJ=obj
 DEP=dep
 
 CFLAGS=-Wall -Wextra -g $(OPT)
-LFLAGS=-lX11 -lGL
+LFLAGS=-lX11 -lGL -lm
 
 CFILES:=$(shell find $(SRC) -name '*.c')
 HFILES:=$(shell find $(SRC) -name '*.h')

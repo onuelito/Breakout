@@ -5,6 +5,8 @@
 #include "physics.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
 int pcount = 15;
 int prows = 3;
@@ -115,6 +117,70 @@ int collide_rect(Rectangle *bodyA, Rectangle *bodyB)
 	return 1;
 }
 
+void push_out_ball(Rectangle *ball, Rectangle body)
+{
+
+}
+
+float magnitude(float x, float y)
+{
+	float mag = pow( pow(x, 2) + pow(y, 2), 0.5);
+	return mag;
+}
+
+void *get_rect_lines(Rectangle body, float lines[8])
+{
+	float array[8] = {
+		body.x - body.width/2.0, body.y - body.height/2.0, //Bottom Left
+		body.x - body.width/2.0, body.y + body.height/2.0, //Top Left
+		body.x + body.width/2.0, body.y + body.height/2.0, //Top Right
+		body.x + body.width/2.0, body.y - body.height/2.0  //Bottom Right
+	};
+
+	for (int i=0; i < 8; i ++) lines[i] = array[i];
+
+}
+
+int line_intersects(float x1, float y1, float x2, float y2,
+					float x3, float y3, float x4, float y4)
+{
+
+	double den = ((x1 - x2)*(y3 - y4)) - ((y1 - y2) * (x3 - x4));
+
+	double px = (x1*y2 - y1*x2)*(x3 - x4) - (x1 - x2)*(x3 * y4 - y3 * x4);
+	double py = (x1*y2 - y1*x2)*(y3 - y4) - (y1 - y2)*(x3*y4 - y3*x4);
+
+	printf("%f\n", den);
+
+	return 0;
+}
+
+void raycast(Rectangle *ball, Rectangle target)
+{
+	//Building the vector
+	
+	float origin[2] = {ball->x, ball->y};
+	float dir[2] = {ball->velocity[0], ball->velocity[1]};
+
+	float mag = magnitude(dir[0], dir[1]);
+	float ray[2] = {dir[0]/mag * 100, dir[1]/mag * 100};
+
+	float rayi[4] = {origin[0], origin[1], origin[0] + ray[0], origin[1] + ray[1]};
+	float lines[8];
+	get_rect_lines(target, lines);
+
+	line_intersects(rayi[0], rayi[1], rayi[2], rayi[3], 	lines[2], lines[3], lines[4], lines[5]);
+
+	/*
+	printf("Raycast Info :\n Collides: %d,\n Line(%f, %f, %f, %f),\n Ball(%f, %f, %f, %f)\n\n", 
+			line_intersects(rayi[0], rayi[1], rayi[2], rayi[3], 
+							lines[2], lines[3], lines[4], lines[5]),
+			lines[2], lines[3], lines[4], lines[5],
+			rayi[0], rayi[1], rayi[2], rayi[3]);
+	*/
+
+}
+
 void move_ball(Rectangle *ball, Rectangle *player)
 {
 	ball->x += ball->velocity[0];
@@ -123,10 +189,12 @@ void move_ball(Rectangle *ball, Rectangle *player)
 	glBindVertexArray(ball->VAO);
 	InitRectBuffer(ball, ball->TBO, ball->tdat, sizeof(ball->tdat));
 
-	//printf("Collision: %d\n", collide_rect(ball, player));
-	
+	raycast(ball, *player);
+
+	/*
 	if( collide_rect(ball, player))
 		ball->velocity[1] *= -1;
+		*/
 }
 
 void draw_rect(Rectangle rect)
