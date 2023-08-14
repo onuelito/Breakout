@@ -1,0 +1,8 @@
+This project was highly influenced by DOOM's (1993) source
+code available on https://github.com.
+
+Requirements :
+	OpenGL 2.0 or greater (released on Septembber 7, 2004)
+	GLX Version 1.4
+	X11
+
