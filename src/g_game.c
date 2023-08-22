@@ -76,21 +76,22 @@ void G_Responder(event_t *ev)
 			if(ev->data == KEY_PAUSE)
 			{
 				paused = !paused;
-				break;
+                return;
 			}
 			if(ev->data < NUMKEYS)
 				gamekeydown[ev->data] = true;
-			break;
+            return;
 		case ev_keyup:
 			if(ev->data < NUMKEYS)
 				gamekeydown[ev->data] = false;
-			break;
+            return;
 
 		default:
 			break;
 	}
 
 	//printf("%d\n", ev->data);
+    return false;
 }
 
 void G_CheckInputs(void)

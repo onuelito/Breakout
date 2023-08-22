@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdbool.h>
 #include <GL/gl.h>
 
 #include "d_main.h"
@@ -5,6 +7,7 @@
 #include "g_game.h"
 
 #include "i_timer.h"
+#include "i_sound.h"
 #include "i_video.h"
 
 #include "r_render.h"
@@ -12,6 +15,8 @@
 event_t events[MAXEVENTS];
 int		eventhead;
 int		eventtail;
+
+bool	running=true;
 
 void D_BreakoutLoop(void);
 
@@ -37,6 +42,11 @@ void D_ProcessEvents(void)
 	}
 }
 
+void D_ExitLoop(void)
+{
+	running = false;
+}
+
 void D_Display(void)
 {
 	R_RenderScene();
@@ -50,6 +60,12 @@ void D_BreakoutMain(void)
 
 	G_Init(); // Initialize game
 
+
+    // Testing audio
+    audio_t bitstones = I_CreateAudio("./res/sound/bitstones.ogg");
+    I_PostAudio(&bitstones);
+
+
 	D_BreakoutLoop();
 }
 
@@ -62,7 +78,12 @@ void D_BreakoutLoop(void)
 		I_UpdateTicks();
 
 		D_ProcessEvents();
+        I_ProcessAudios();
 		G_CheckInputs();
 		D_Display();
+
+		if(!running) break;
 	}
+
+	I_ShutdownGraphics();
 }

@@ -7,8 +7,9 @@
 
 typedef enum
 {
-	ev_keydown,
+	ev_none,
 	ev_keyup,
+	ev_keydown,
 } ev_type;
 
 typedef struct

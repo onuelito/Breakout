@@ -2,6 +2,7 @@
 // Graphics management script using
 // X11
 
+#include <stdio.h>
 #include <GL/glx.h>
 
 #include <X11/Xlib.h>
@@ -29,6 +30,8 @@ GLXContext		X_context;
 int				X_width=600;
 int				X_height=600;
 
+Atom			X_atomdeletewindow;
+
 void UpdateViewport(void);
 
 int xlatekey(void)
@@ -37,12 +40,8 @@ int xlatekey(void)
 
 	switch(rc = XkbKeycodeToKeysym(X_display, X_event.xkey.keycode, 0, 0))
 	{
-		case XK_Right:
-			rc = KEY_RIGHTARROW;
-			break;
-		case XK_Left:
-			rc = KEY_LEFTARROW;
-			break;
+		case XK_Right:  rc = KEY_RIGHTARROW;    break;
+		case XK_Left:   rc = KEY_LEFTARROW;     break;
 		default:
 			break;
 	}
@@ -61,15 +60,24 @@ void I_GetEvent(void)
 			event.type = ev_keydown;
 			event.data = xlatekey();
 			D_PostEvent(&event);
+	        //glXSwapBuffers(X_display, X_mainWindow);
 			break;
 		case KeyRelease:
 			event.type = ev_keyup;
 			event.data = xlatekey();
 			D_PostEvent(&event);
 			break;
+		case ClientMessage:
+			if(X_event.xclient.data.l[0] == X_atomdeletewindow)
+				I_Quit();
+			break;
 		case Expose:
+        case ConfigureNotify:
 			UpdateViewport();
 			break;
+
+        default:
+            break;
 	}
 }
 
@@ -77,12 +85,16 @@ void I_UpdateEvent(void)
 {
 	while(XPending(X_display))
 		I_GetEvent();
-	glXSwapBuffers(X_display, X_mainWindow);
+	//glXSwapBuffers(X_display, X_mainWindow);
 }
 
 void I_ShutdownGraphics(void)
 {
-
+	glXDestroyContext(X_display, X_context);
+	XFree(X_visualinfo);
+	XFreeColormap(X_display, X_cmap);
+	XDestroyWindow(X_display, X_mainWindow);
+	XCloseDisplay(X_display);
 }
 
 
@@ -150,6 +162,19 @@ void I_InitGraphics(void)
 	if(!X_context)
 		I_Error("Could not create graphic context");
 	glXMakeCurrent(X_display, X_mainWindow, X_context);
+
+
+	X_atomdeletewindow = XInternAtom(X_display, "WM_DELETE_WINDOW", False);
+	XSetWMProtocols(X_display, X_mainWindow, &X_atomdeletewindow, True);
+
+    XSizeHints* X_sizehints = XAllocSizeHints();
+    X_sizehints->flags = PMinSize | PMaxSize;
+    X_sizehints->min_width = X_width;
+    X_sizehints->min_height = X_height;
+    X_sizehints->max_width = X_width;
+    X_sizehints->max_height = X_height;
+    XSetWMNormalHints(X_display, X_mainWindow, X_sizehints);
+    XFree(X_sizehints);
 }
 
 void UpdateViewport(void)

@@ -3,4 +3,6 @@
 
 void I_Error(char *error);
 
+void I_Quit(void);
+
 #endif

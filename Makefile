@@ -5,7 +5,7 @@ OBJ=obj
 DEP=dep
 
 CFLAGS=-Wall -Wextra -g $(OPT)
-LFLAGS=-lX11 -lGL -lm
+LFLAGS=-lX11 -lGL -lm -logg -lvorbis -lvorbisfile -lasound
 
 CFILES:=$(shell find $(SRC) -name '*.c')
 HFILES:=$(shell find $(SRC) -name '*.h')

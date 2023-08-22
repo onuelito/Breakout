@@ -54,5 +54,5 @@ void I_UpdateTicks(void)
 	sleepTime 	= nextTick - ((clock.tv_sec * 1000) + (clock.tv_usec / 1000));
 
 	sclock.tv_usec = sleepTime * 1000;
-	select(0, 0, 0, 0, &sclock);
+	//select(0, 0, 0, 0, &sclock);
 }
